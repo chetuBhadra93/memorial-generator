@@ -18,6 +18,17 @@ let db;
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Function to get the correct base URL for production/development
+function getBaseURL(req) {
+  if (process.env.NODE_ENV === 'production') {
+    // In production, use the host from the request or Railway domain
+    const host = req.get('host') || process.env.RAILWAY_STATIC_URL || process.env.PUBLIC_URL;
+    return host ? `https://${host}` : `https://memorial-generator-production.up.railway.app`;
+  }
+  // In development, use localhost
+  return `http://localhost:${PORT}`;
+}
+
 // CORS Configuration for production deployment
 const corsOptions = {
   origin: [
@@ -468,7 +479,7 @@ app.post('/api/generate-poster', upload.single('photo'), async (req, res) => {
         message: `Memorial poster created for ${personName}`,
         poster: {
           filename: result.filename,
-          url: `http://localhost:${PORT}${result.url}`
+          url: `${getBaseURL(req)}${result.url}`
         }
       });
     } else {
@@ -586,7 +597,7 @@ app.post('/api/generate-memorial/:sessionId', async (req, res) => {
         memorial: {
           id: memorialId,
           filename: result.filename,
-          url: `http://localhost:${PORT}${result.url}`,
+          url: `${getBaseURL(req)}${result.url}`,
           greetingType: effectiveGreetingType,
           version,
           enhancedWithAI: !!photoAnalysis
