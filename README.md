@@ -46,6 +46,8 @@ This application allows you to:
    This opens:
    - 🌐 **Frontend**: http://localhost:3000 (React web app)
    - 🖥️ **Backend**: http://localhost:3001 (API server)
+   
+   **Live Demo**: https://memorial-generator.vercel.app
 
 4. **Use the web interface:**
    - Upload a photo of your loved one
